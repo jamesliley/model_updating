@@ -1,6 +1,6 @@
 ########################################################
 ## Draw `chaos' figures for AISTATS supplement        ##
-## Author redacted, 6 Oct 2020                        ##
+## James Liley, 6 Oct 2020                            ##
 ########################################################
 ##
 ## Throughout, we have

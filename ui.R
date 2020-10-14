@@ -1,6 +1,6 @@
 ########################################################
 ## Code for web app to illustrate AISTATS manuscript  ##
-## Author redacted, 6 Oct 2020                        ##
+## James Liley, 6 Oct 2020                            ##
 ########################################################
 ##
 ## The authors intend that should this manuscript be 

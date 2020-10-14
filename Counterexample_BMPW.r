@@ -1,6 +1,6 @@
 #################################################################
 ## Counterexample code to show better models can perform worse ##
-## Author redacted, 6 Oct 2020                                 ##
+## Sam Emerson, 6 Oct 2020                                     ##
 #################################################################
 
 f <- function(xs,xa,xl){

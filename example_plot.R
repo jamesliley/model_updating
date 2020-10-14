@@ -1,6 +1,6 @@
 ########################################################
 ## Draw main figure for AISTATS submission            ##
-## Author redacted, 6 Oct 2020                        ##
+## James Liley, 6 Oct 2020                            ##
 ########################################################
 ##
 ## Throughout, we have
