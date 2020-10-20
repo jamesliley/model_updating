@@ -1,5 +1,5 @@
 ########################################################
-## Draw `chaos' figures for AISTATS supplement        ##
+## Draw figure 4 for manuscript                       ##
 ## James Liley, 6 Oct 2020                            ##
 ########################################################
 ##
@@ -8,6 +8,10 @@
 ## xl is constant at 0, and gL(.,xl)=xl
 ## g denotes g^A_e
 ## f denotes f_e
+
+# Auxiliary functions
+logit=function(x,sc=1) 1/ (1+ exp(-sc*x))
+ilogit=function(x,sc=1) -log(1/x  - 1)/sc
 
 ## Resolution
 res=300
@@ -70,6 +74,10 @@ re=function(xs,xa,e) {
 x0=outer(xs,xa,f)
 xn=outer(xs,xa,function(x,y) ptn(N,x,y)) # matrix of values of true risk P(Y_N|X_N(0)=(xs,xa)) at epoch N. Equivalentl to predicted risk at epoch N+1.
 xd=xn-0.5
+
+
+# Colours
+icol2=colorRampPalette(c("blue","white","red"))(100)
 
 
 plot(0,type="n",xlim=range(xs),ylim=range(xa),xlab="Set risk",ylab="Actionable risk",

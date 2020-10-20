@@ -1,5 +1,5 @@
 ########################################################
-## Draw main figure for AISTATS submission            ##
+## Draw figure 3 for manuscript                       ##
 ## James Liley, 6 Oct 2020                            ##
 ########################################################
 ##
@@ -25,7 +25,7 @@ save_dir="./"
 
 # Comment/uncomment to save 
 #pdf(paste0(save_dir,"convergence_plot.pdf"),width=5,height=7.5)
-jpeg(paste0(save_dir,"convergence_plot.jpg"),width=5,height=7.5,units="in",res=200)
+jpeg(paste0(save_dir,"convergence_plot.jpg"),width=5,height=7,units="in",res=400)
 
 
 ########################################################
@@ -102,18 +102,18 @@ delta=rep(0,length(xav))
 
 for (e in 1:emax) {
   p1=f(xsv,g(p0,xav)) # p1 is now P(Y|X(0)=(xs,xa)) at epoch e
-
+  
   delta_e=p1-p0 # difference in P(Y|...) between epoch i and epoch e-1
   
   wconv=which(abs(delta_e)< tol) # convergence at these coordinates
   wdiv=which(abs(abs(delta_e)-abs(delta)) < tol & (abs(delta_e) > tol2)) # diverged and settled
   wx=unique(c(wconv,wdiv))
-
+  
   # Update matrices
   icount[wx]=1+icount[wx] 
   iconv[wconv]=1
   iconv[wdiv]=-1
-    
+  
   # Reset
   p0=p1 
   delta=delta_e  
@@ -131,11 +131,12 @@ icount=emax-icount
 ## Set up panels
 xdim=1
 layout(rbind(c(1,2),c(3,3),c(3,3)),widths=c(xdim,xdim,2*xdim),heights=c(xdim,xdim,xdim))
+par(mar=c(4,4,1,1))
 
 ## Draw a plot showing f
 plot(0,type="n",xlim=c(-4,4),ylim=c(-4,4),xaxs="i",yaxs="i",
-  xlab=expression(paste("Set risk, X"^s)),
-  ylab=expression(paste("Actionable risk, X"^a)))
+  xlab=expression(paste("Non-actionable (static) risk factor, X"^s)),
+  ylab=expression(paste("Actionable risk factor, X"^a)))
 xas=seq(-4,4,length=res)
 xcol=colorRampPalette(c("red","blue"))(100)
 image(xas,xas,outer(xas,xas,f),col=xcol,add=T)
@@ -165,14 +166,17 @@ legend("topleft",legend=rvals,pch=16,col=rcols,bty="n",
 
 # Initialise main plot
 plot(0,type="n",xlim=xslim,ylim=xalim,xaxs="i",yaxs="i",
-  xlab=expression(paste("Set risk, X"^s)),
-  ylab=expression(paste("Actionable risk, X"^a)))
+  xlab=expression(paste("Non-actionable (static) risk factor, X"^s)),
+  ylab=expression(paste("Actionable risk factor, X"^a)))
 
 # Plot convergent and divergent regions separately
+ilim_pos=10; ilim_neg=10
 mat_pos=icount; mat_pos[which(iconv<0)]=NA
 mat_neg=icount; mat_neg[which(iconv>0)]=NA
+mat_pos[which(mat_pos>ilim_pos)]=ilim_pos
+mat_neg[which(mat_neg> ilim_neg)]= ilim_neg
 
-cspread=4
+cspread=1
 icol_pos=colorRampPalette(c("white",rep("red",cspread),rep("darkred",cspread)))(50)
 icol_neg=colorRampPalette(c("black",rep("blue",cspread),rep("lightblue",cspread)))(50)
 image(xs1,xa1,mat_pos,col=icol_pos,add=T)
@@ -180,9 +184,15 @@ image(xs1,xa1,mat_neg,col=icol_neg,add=T)
 
 
 # Add legend
-legend("bottomleft",c("Div. fast","Div. slow","Conv. slow", "Conv. fast"),title="Behaviour",
-   col=c("black","blue","red","white"),pch=16,bg="lightgray",bty="n")
+legend("bottomleft",c("Div. fast","Div. slowly","Conv. slowly", "Conv. fast"),title="Behaviour",
+  col=c("black","blue","red","white"),pch=16,bg="lightgray",bty="n")
 
+# Add gradient; kludge this
+ncol=length(icol_pos)+length(icol_neg)
+xleg=xslim[1]+c(0.3,0.4)
+yleg=xalim[1]+seq(0.3,1.4,length=ncol)
+zleg=rbind(1:ncol,1:ncol)
+image(xleg,yleg,zleg,col=c(icol_pos,icol_neg),add=T)
 
 
 ########################################################
